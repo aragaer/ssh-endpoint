@@ -103,56 +103,6 @@ func (h *Host) Connect(sconn *ssh.ServerConn, ch ssh.NewChannel) {
             fmt.Fprintln(os.Stderr, "There was an error with the scanner in attached container", err)
         }
 	defer channel.Close()
-
-	/*
-
-	for {
-		line, err := term.ReadLine()
-		if err == io.EOF {
-			// Closed
-			break
-		} else if err != nil {
-			logger.Errorf("[%s] Terminal reading error: %s", term.Conn.RemoteAddr(), err)
-			break
-		}
-
-		err = ratelimit.Count(1)
-		if err != nil {
-			user.Send(message.NewSystemMsg("Message rejected: Rate limiting is in effect.", user))
-			continue
-		}
-		if len(line) > maxInputLength {
-			user.Send(message.NewSystemMsg("Message rejected: Input too long.", user))
-			continue
-		}
-		if line == "" {
-			// Silently ignore empty lines.
-			continue
-		}
-
-		m := message.ParseInput(line, user)
-
-		// FIXME: Any reason to use h.room.Send(m) instead?
-		h.HandleMsg(m)
-
-		cmd := m.Command()
-		if cmd == "/nick" || cmd == "/theme" {
-			// Hijack /nick command to update terminal synchronously. Wouldn't
-			// work if we use h.room.Send(m) above.
-			//
-			// FIXME: This is hacky, how do we improve the API to allow for
-			// this? Chat module shouldn't know about terminals.
-			term.SetPrompt(GetPrompt(user))
-			user.SetHighlight(user.Name())
-		}
-	}
-
-	err = h.Leave(user)
-	if err != nil {
-		logger.Errorf("[%s] Failed to leave: %s", term.Conn.RemoteAddr(), err)
-		return
-	}
-	*/
 	fmt.Fprintf(os.Stderr, "[%s] Leaving: %s\n", sconn.RemoteAddr(), id.id)
 }
 
